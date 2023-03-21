@@ -30,7 +30,7 @@ const Slider = (props) => {
   }, []);
   const changeImageHandler = useCallback(() => {
     if (i > items.length - 1) i = 0;
-    setsliderimg((p) => items[i++].image);
+    setsliderimg((p) => items[i].image);
     i += 1;
   }, []);
   return (

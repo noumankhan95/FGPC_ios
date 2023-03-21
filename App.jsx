@@ -7,6 +7,7 @@ import SetupProfile from "./screens/Profile/SetupProfile.jsx";
 import Auth from "./screens/Signup/Auth.jsx";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
+import WelcomePage from "./screens/Welcome/Welcome.jsx";
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
@@ -14,6 +15,16 @@ export default function App() {
       <StatusBar style="auto" />
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Authenticate"
+            component={Auth}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Welcome"
+            component={WelcomePage}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="Root"
             component={DrawerNavigation}
