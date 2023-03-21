@@ -69,9 +69,14 @@ const SetupProfile = (props) => {
             cupiditate!
           </Text>
         </View>
-        <Pressable style={styles.btnContainer}>
-          <Text style={styles.btnText}>Continue</Text>
-        </Pressable>
+        <TouchableOpacity style={styles.btnContainer}  onPress={() => props.navigation.navigate("Root")}>
+          <Text
+            style={styles.btnText}
+           
+          >
+            Continue
+          </Text>
+        </TouchableOpacity>
       </KeyboardAvoidingView>
     </ScrollView>
   );

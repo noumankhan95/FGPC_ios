@@ -36,10 +36,17 @@ export default function Auth({ navigation }) {
       />
       <Button
         style={{ backgroundColor: color.Primary, width: "80%" }}
-        mode="contained"
-        onPress={() => navigation.navigate("Root")}
+        // mode="contained"
+        onPress={() => navigation.navigate("Setup")}
         title="Sign up"
       />
+      {/* <TouchableOpacity
+        style={{ backgroundColor: color.Primary, width: "80%" }}
+        // mode="contained"
+        onPress={() => navigation.navigate("Setup")}
+      >
+        <Text>Signup</Text>
+      </TouchableOpacity> */}
 
       <Text style={{ marginTop: 30 }}>
         ---------- or continue with ------------
