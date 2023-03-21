@@ -37,7 +37,7 @@ export default function Auth({ navigation }) {
       <Button
         style={{ backgroundColor: color.Primary, width: "80%" }}
         mode="contained"
-        onPress={() => navigation.navigate("Welcome")}
+        onPress={() => navigation.navigate("Root")}
         title="Sign up"
       />
 

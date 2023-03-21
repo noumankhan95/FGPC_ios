@@ -16,15 +16,16 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Authenticate"
-            component={Auth}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
             name="Welcome"
             component={WelcomePage}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="Authenticate"
+            component={Auth}
+            options={{ headerShown: false }}
+          />
+
           <Stack.Screen
             name="Root"
             component={DrawerNavigation}

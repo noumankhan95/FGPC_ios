@@ -46,12 +46,12 @@ const WelcomePage = () => {
   const [data, setdata] = useState(info[j]);
   console.log("i val ", info.length);
   const changeImageHandler = () => {
-    if (j <= info.length-1) {
+    if (j <= info.length - 1) {
       console.log("seetting for j: ", j);
       setdata((p) => info[j++]);
       console.log("new j", info[j]);
     } else {
-      navigate("Root");
+      navigate("Authenticate");
     }
 
     // setdata(info[i])
@@ -81,9 +81,11 @@ const WelcomePage = () => {
           </View>
         </SafeAreaView>
       )}
-      <TouchableOpacity style={styles.button} onPress={changeImageHandler}>
-        <Text style={styles.nextBtn}>Next</Text>
-      </TouchableOpacity>
+      {data.image && (
+        <TouchableOpacity style={styles.button} onPress={changeImageHandler}>
+          <Text style={styles.nextBtn}>Next</Text>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 };

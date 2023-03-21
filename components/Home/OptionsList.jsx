@@ -90,6 +90,7 @@ const Style = StyleSheet.create({
     margin: 10,
     height: 80,
     borderRadius: 40,
+    padding: 10,
   },
   itemtext: {
     color: "gray",
