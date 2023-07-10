@@ -27,6 +27,7 @@ const SetupProfile = (props) => {
       const { status } = await requestpermission();
       if (status !== "granted") return Alert.alert("need Permissions");
       const res = await ImagePicker.launchCameraAsync();
+      if (res.canceled) return;
       console.log(res);
       setselectedimg((p) => res.assets[0].uri);
     } catch (e) {
@@ -69,13 +70,11 @@ const SetupProfile = (props) => {
             cupiditate!
           </Text>
         </View>
-        <TouchableOpacity style={styles.btnContainer}  onPress={() => props.navigation.navigate("Root")}>
-          <Text
-            style={styles.btnText}
-           
-          >
-            Continue
-          </Text>
+        <TouchableOpacity
+          style={styles.btnContainer}
+          onPress={() => props.navigation.navigate("Root")}
+        >
+          <Text style={styles.btnText}>Continue</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </ScrollView>
@@ -97,6 +96,8 @@ const styles = StyleSheet.create({
     minHeight: height * 0.25,
     resizeMode: "cover",
     borderRadius: 400,
+    borderWidth: 0.3,
+    borderColor: "black",
   },
   iconContainer: {
     backgroundColor: "skyblue",

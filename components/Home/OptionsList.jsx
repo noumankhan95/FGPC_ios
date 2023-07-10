@@ -6,6 +6,7 @@ import {
   MaterialCommunityIcons,
   Feather,
 } from "@expo/vector-icons";
+import DepartmentsScreen from "../../screens/Departments/Departments";
 const ListItem = (props) => {
   return (
     <View style={Style.itemContainer}>
@@ -61,25 +62,26 @@ const dummyData = [
 const OptionsList = (props) => {
   return (
     <View style={Style.container}>
-      <View style={Style.textContainer}>
+      {/* <View style={Style.textContainer}>
         <Text style={Style.infoText}>Doctor Specialty</Text>
         <Text style={Style.infoText}>See All</Text>
-      </View>
+      </View> */}
 
-      <FlatList
+      {/* <FlatList
         data={dummyData}
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => <ListItem {...item} />}
         numColumns={4}
-      />
+      /> */}
+      <DepartmentsScreen />
     </View>
   );
 };
 const Style = StyleSheet.create({
   container: {
-    flex: 0.4,
+    flex: 0.7,
 
-    marginTop: 10,
+    // marginTop: 10,
   },
   itemContainer: {
     alignItems: "center",
@@ -94,6 +96,7 @@ const Style = StyleSheet.create({
   },
   itemtext: {
     color: "gray",
+    textAlign: "center",
   },
   textContainer: {
     flexDirection: "row",

@@ -14,13 +14,13 @@ const Header = (props) => {
       </View>
       <View style={Style.textContainer}>
         <Text style={Style.textData}>
-          Good Morning <Icon.Entypo name="hand" />
+          Good Day <Icon.Entypo name="hand" />
         </Text>
-        <Text>Ladies And Gentlemen</Text>
+        <Text>Patient X</Text>
       </View>
       <View style={Style.iconcontainer}>
-        <Icon.AntDesign name={"bells"} size={20} />
-        <Icon.Ionicons name={"heart-outline"} size={20} />
+        {/* <Icon.AntDesign name={"bells"} size={20} />
+        <Icon.Ionicons name={"heart-outline"} size={20} /> */}
       </View>
     </View>
   );

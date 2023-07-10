@@ -35,45 +35,44 @@ const Slider = (props) => {
   }, []);
   return (
     <View style={style.container}>
-      <Text style={[style.maintext, { fontSize: 30 }]}>Medical Checks</Text>
-      <Text style={style.maintext}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit saepe
-        deleniti quo nemo
-      </Text>
+      {/* //   <Text style={[style.maintext, { fontSize: 30 }]}>Medical Checks</Text>
+    //   <Text style={style.maintext}>
+    //     Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit saepe
+    //     deleniti quo nemo
+    //   </Text> */}
       <View style={style.slidercontainer}>
-        <Pressable style={style.btnContainer}>
+        {/* <Pressable style={style.btnContainer}>
           <Text style={style.btnText}>Check Now</Text>
-        </Pressable>
+        </Pressable> */}
         <View style={style.Slidercontroller}>
           <View style={style.imgcontainer}>
             <Image source={{ uri: sliderimg }} style={style.img} />
           </View>
-
-          <Pressable style={style.sliderbtns}>
-            <Text style={style.sliderbtn} onPress={changeImageHandler}>
-              _
-            </Text>
-            <Text style={style.sliderbtn} onPress={changeImageHandler}>
-              _
-            </Text>
-            <Text style={style.sliderbtn} onPress={changeImageHandler}>
-              _
-            </Text>
-          </Pressable>
         </View>
       </View>
+      <Pressable style={style.sliderbtns}>
+        <Text style={style.sliderbtn} onPress={changeImageHandler}>
+          _
+        </Text>
+        <Text style={style.sliderbtn} onPress={changeImageHandler}>
+          _
+        </Text>
+        <Text style={style.sliderbtn} onPress={changeImageHandler}>
+          _
+        </Text>
+      </Pressable>
     </View>
   );
 };
 const style = StyleSheet.create({
   container: {
-    backgroundColor: "mediumslateblue",
-    flex: 0.3,
-    marginTop: 10,
-    justifyContent: "space-evenly",
+    // backgroundColor: "mediumslateblue",
+    flex: 0.35,
+    marginVertical: 3,
+    justifyContent: "flex-start",
     marginHorizontal: 10,
-    borderRadius: 20,
-    padding: 10,
+    // borderRadius: 20,
+    // padding: 10,
   },
   btnContainer: {
     width: "30%",
@@ -91,42 +90,44 @@ const style = StyleSheet.create({
     color: "white",
   },
   slidercontainer: {
-    height: "70%",
+    height: "80%",
     flexDirection: "row",
     width: "100%",
-    marginTop: 10,
+    // marginTop: 10,
     alignItems: "flex-end",
     justifyContent: "space-around",
+    // backgroundColor: "red",
   },
   sliderbtns: {
     width: "30%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: -30,
+    alignSelf: "center",
+    // paddingVertical: -30,
   },
   sliderbtn: {
-    color: "white",
+    color: "mediumslateblue",
     fontSize: 30,
     fontWeight: "900",
   },
   imgcontainer: {
-    height: "70%",
+    height: "100%",
     width: "100%",
     alignItems: "center",
     justifyContent: "flex-start",
   },
   img: {
-    resizeMode: "contain",
-    width: "90%",
+    resizeMode: "cover",
+    width: "100%",
     height: "100%",
-    borderRadius: 20,
+    // borderRadius: 20,
   },
   Slidercontroller: {
     height: "100%",
-    width: "50%",
+    width: "100%",
     // backgroundColor: "red",
-    alignItems: "center",
+    alignItems: "flex-start",
   },
 });
 export default Slider;

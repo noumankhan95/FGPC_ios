@@ -6,8 +6,8 @@ import OptionsList from "../../components/Home/OptionsList.jsx";
 const Home = (props) => {
   return (
     <View style={style.container}>
-      <Header />
-      <SearchBar />
+      {/* <Header /> */}
+      {/* <SearchBar /> */}
       <Slider />
       <OptionsList />
     </View>
@@ -17,7 +17,7 @@ const Home = (props) => {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 25,
+    // paddingTop: 25,
   },
 });
 export default Home;

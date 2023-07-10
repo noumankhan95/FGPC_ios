@@ -59,7 +59,7 @@ const WelcomePage = () => {
   useEffect(() => {
     const sub = setTimeout(() => {
       setdata((p) => info[++j]);
-    }, 3000);
+    }, 1000);
     return () => clearTimeout(sub);
   }, []);
 

@@ -33,6 +33,26 @@
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
         }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow Social Assistance to access your photos.",
+          "savePhotosPermission": "Allow Social Assistance to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them With the Admin"
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow App to access your microphone."
+        }
       ]
     ]
   }
