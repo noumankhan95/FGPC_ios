@@ -15,11 +15,16 @@ import { useCallback, useEffect, useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
+import { useContext } from "react";
+import { authCtx } from "../../store/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Authentication = (props) => {
   const { params } = useRoute();
   const [authMode, setauthMode] = useState(0);
   const [isloading, setisloading] = useState(false);
+  const [tokenStored, setTokenStored] = useState(false);
+
   const [userInfo, setuserInfo] = useState({
     name: "",
     email: "",
@@ -28,35 +33,51 @@ const Authentication = (props) => {
     contact: "",
   });
   const { navigate, replace } = useNavigation();
-  // const uctx = useContext(Userctx);
+
   const ChangetoSignup = useCallback(() => {
     setauthMode((p) => 0);
   }, [authMode]);
   const ChangetoLogin = useCallback(() => {
     setauthMode((p) => 1);
   }, [authMode]);
+  const uctx = useContext(authCtx);
 
   const LoginHandler = useCallback(async () => {
     try {
       setisloading((p) => true);
-      //   const sform = new FormData();
+      // const sform = new FormData();
       //   const Device_id = await AsyncStorage.getItem("DeviceToken");
-      //   sform.append("c_email", userInfo.email.trim());
-      //   sform.append("c_password", userInfo.password.trim());
+      // sform.append("email", userInfo.email.trim());
+      // sform.append("password", userInfo.password.trim());
       //   sform.append("device_id", Device_id);
-      //   const r = await fetch("https://tarrhoon.com/Api/login", {
-      //     method: "POST",
-      //     headers: { "Content-Type": "multipart/form-data" },
-      //     body: sform,
-      //   });
-      //   if (!r.ok) throw "An Error Occured";
-      //   const d = await r.json();
-      //   if (d.status) {
-      //     await AsyncStorage.setItem("user", JSON.stringify(d?.data[0]));
-      //     uctx.setuserInfo(d?.data[0]);
+      console.log(process.env.EXPO_PUBLIC_WEB_URL);
+      const r = await fetch(
+        `https://psychedelic-wine-production.up.railway.app/auth/login_for_app`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: userInfo.email.trim(),
+            password: userInfo.password,
+          }),
+        }
+      );
+
+      if (!r.ok || r.status === 401) throw "An Error Occured";
+      const d = await r.json();
+      // if (d.status) {
+      console.log(d);
+      await AsyncStorage.setItem("FGPC_user", JSON.stringify(d.user));
+      const expiryDate = new Date().getTime() + 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+      await AsyncStorage.setItem(
+        "FGPC_token",
+        JSON.stringify({ token: d.token, expiryDate })
+      );
+      setTokenStored(true);
+      uctx.setuserInfo({ ...d.user, token: d.token }, true);
       replace("Root", { ...params });
-      //   }
-      //   if (!d.status) throw d.message;
+
+      // if (!d.status) throw d.message;
     } catch (e) {
       console.log(e);
       Alert.alert(
@@ -129,14 +150,14 @@ const Authentication = (props) => {
           alignItems: "center",
           justifyContent: "center",
           // backgroundColor: "rgba(115,105,239,255)",
-          backgroundColor: "lightblue",
+          backgroundColor: "white",
           padding: 10,
         }}
       >
-        <Text style={{ fontSize: 16, color: "white", margin: 10 }}>
+        <Text style={{ fontSize: 16, color: "black", margin: 10 }}>
           Completing Your Request.Please Wait A Moment
         </Text>
-        <ActivityIndicator color={"white"} size={70} />
+        <ActivityIndicator color={"red"} size={70} />
       </View>
     );
   return (
@@ -152,7 +173,7 @@ const Authentication = (props) => {
         <View
           style={{
             flex: 1,
-            backgroundColor: "lightsteelblue",
+            // backgroundColor: "lightsteelblue",
           }}
         >
           <FontAwesome5
@@ -173,44 +194,46 @@ const Authentication = (props) => {
           {authMode === 0 && (
             <View
               style={{
-                flex: 0.5,
+                flex: 0.35,
                 justifyContent: "space-between",
                 padding: 10,
+                width: "95%",
+                alignSelf: "center",
               }}
             >
-              <Text style={styles.text}>Enter Name</Text>
+              {/* <Text style={styles.text}>Enter Name</Text> */}
               <TextInput
-                // placeholder={"Enter Name"}
+                placeholder={"Enter Name"}
                 value={userInfo.name}
                 onChangeText={ChangeInputHandler.bind(null, "name")}
                 style={styles.input}
               />
-              <Text style={styles.text}>Enter Contact Number</Text>
+              {/* <Text style={styles.text}>Enter Contact Number</Text> */}
 
               <TextInput
-                // placeholder={"Enter Contact"}
+                placeholder={"Enter Contact"}
                 value={userInfo.contact}
                 onChangeText={ChangeInputHandler.bind(null, "contact")}
                 style={styles.input}
               />
-              <Text style={styles.text}>Enter Address</Text>
+              {/* <Text style={styles.text}>Enter Address</Text> */}
 
               <TextInput
-                // placeholder={"Enter Address"}
+                placeholder={"Enter Address"}
                 value={userInfo.address}
                 onChangeText={ChangeInputHandler.bind(null, "address")}
                 style={styles.input}
               />
-              <Text style={styles.text}>Enter Email</Text>
+              {/* <Text style={styles.text}>Enter Email</Text> */}
               <TextInput
-                // placeholder={"Enter Email"}
+                placeholder={"Enter Email"}
                 value={userInfo.email}
                 onChangeText={ChangeInputHandler.bind(null, "email")}
                 style={styles.input}
               />
-              <Text style={styles.text}>Enter Password</Text>
+              {/* <Text style={styles.text}>Enter Password</Text> */}
               <TextInput
-                // placeholder={"Enter Password"}
+                placeholder={"Enter Password"}
                 secureTextEntry
                 value={userInfo.password}
                 onChangeText={ChangeInputHandler.bind(null, "password")}
@@ -221,20 +244,23 @@ const Authentication = (props) => {
           {authMode === 1 && (
             <View
               style={{
-                flex: 0.1,
+                flex: 0.03,
                 justifyContent: "space-between",
                 padding: 10,
+                width: "95%",
+                alignSelf: "center",
               }}
             >
-              <Text style={styles.text}>Enter Email</Text>
+              {/* <Text style={styles.text}>Enter Email</Text> */}
 
               <TextInput
                 // placeholder={"Enter Email"}
                 value={userInfo.email}
                 onChangeText={ChangeInputHandler.bind(null, "email")}
                 style={styles.input}
+                placeholder="Email"
               />
-              <Text style={styles.text}>Enter Password</Text>
+              {/* <Text style={styles.text}>Enter Password</Text> */}
 
               <TextInput
                 // placeholder={"Enter Password"}
@@ -242,6 +268,7 @@ const Authentication = (props) => {
                 value={userInfo.password}
                 onChangeText={ChangeInputHandler.bind(null, "password")}
                 style={styles.input}
+                placeholder="Password"
               />
             </View>
           )}
@@ -251,17 +278,23 @@ const Authentication = (props) => {
               flex: 0.2,
               alignItems: "center",
               justifyContent: "space-around",
+              width: "100%",
             }}
           >
             <TouchableOpacity
               style={{
-                padding: 14,
-                backgroundColor: "blue",
+                padding: 10,
+                backgroundColor: "crimson",
                 borderRadius: 8,
+                width: "90%",
+                justifyContent: "center",
+                alignItems: "center",
               }}
               onPress={authMode === 0 ? SignupHandler : LoginHandler}
             >
-              <Text style={{ fontSize: 20, color: "white" }}>
+              <Text
+                style={{ fontSize: 20, color: "white", textAlign: "center" }}
+              >
                 {authMode === 0 ? "Sign Up" : "Login"}
               </Text>
             </TouchableOpacity>
@@ -290,7 +323,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 19,
-    color: "black",
+    color: "purple",
     fontWeight: "400",
   },
 });

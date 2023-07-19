@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,9 +7,36 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import RenderDoctor from "../../components/Home/DoctorItem";
 const AvailableDoctorsScreen = () => {
   const { navigate } = useNavigation();
+  const { params } = useRoute();
+  const [docDetails, setdocDetails] = useState(params.doctorsAvailable || []);
+  const [loading, setisloading] = useState(false);
+  console.log(params);
+  // useEffect(() => {
+  //   setisloading((p) => true);
+  //   fetch(
+  //     `https://psychedelic-wine-production.up.railway.app/patient_user/find_department_by_title?department_title=${params.dept_title}`,
+  //     {
+  //       method: "get",
+  //       headers: {
+  //         Authorization: `Bearer ${params.token}`,
+  //       },
+  //     }
+  //   )
+  //     .then((r) => {
+  //       if (!r.ok || r.status === 401) throw "Error";
+  //       return r.json();
+  //     })
+  //     .then((d) => {
+  //       console.log(d);
+  //     })
+  //     .catch((e) => console.log(e))
+  //     .finally((f) => setisloading(false));
+  // }, []);
+
   const doctors = [
     {
       id: 1,
@@ -37,28 +64,13 @@ const AvailableDoctorsScreen = () => {
     },
   ];
 
-  const renderDoctor = ({ item }) => (
-    <View style={styles.doctorContainer}>
-      <Image source={{ uri: item.image }} style={styles.doctorImage} />
-      <Text style={styles.doctorName}>{item.name}</Text>
-      <TouchableOpacity
-        style={styles.appointmentButton}
-        onPress={() => {
-          navigate("Appointment");
-        }}
-      >
-        <Text style={styles.buttonText}>Book Appointment</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Available Doctors</Text>
+      <Text style={styles.heading}>Available {params.dept_title} Doctors</Text>
       <FlatList
-        data={doctors}
-        renderItem={renderDoctor}
-        keyExtractor={(item) => item.id.toString()}
+        data={docDetails}
+        renderItem={({ item }) => <RenderDoctor item={item} />}
+        keyExtractor={(item) => item.doctor_id.toString()}
         contentContainerStyle={styles.flatListContainer}
         showsVerticalScrollIndicator={false}
       />
@@ -83,6 +95,9 @@ const styles = StyleSheet.create({
   doctorContainer: {
     alignItems: "center",
     marginBottom: 24,
+    borderTopWidth: 0.4,
+    borderBottomWidth: 0.3,
+    paddingVertical: 10,
   },
   doctorImage: {
     width: 150,

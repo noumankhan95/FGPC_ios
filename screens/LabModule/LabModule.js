@@ -3,6 +3,7 @@ import { View, FlatList, Text, StyleSheet, Button } from "react-native";
 
 const LabModule = () => {
   // Sample data for lab reports
+  
   const labReports = [
     { id: "1", testName: "Blood Test", result: "Normal", date: "2023-07-01" },
     { id: "2", testName: "Urine Test", result: "Abnormal", date: "2023-07-02" },

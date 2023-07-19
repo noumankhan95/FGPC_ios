@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import {
   Ionicons,
@@ -12,10 +13,17 @@ import {
   AntDesign,
   MaterialCommunityIcons,
   Feather,
+  Fontisto,
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useContext } from "react";
+import { authCtx } from "../../store/auth";
 const DepartmentsScreen = () => {
   const { navigate } = useNavigation();
+  const [depts, setdepts] = useState([]);
+  const uctx = useContext(authCtx);
+  // const { token } = uctx.userInfo;
+  const [isloading, setisloading] = useState(false);
   const departments = [
     {
       id: 1,
@@ -76,14 +84,53 @@ const DepartmentsScreen = () => {
       name: "Radiology",
       icon: () => <Feather name="radio" size={35} color={"deepskyblue"} />,
     },
+    {
+      id: 12,
+      name: "Surgical",
+      icon: () => <Fontisto name="surgical-knife" size={35} color="black" />,
+    },
+    {
+      id: 13,
+      name: "Pulmonolgy",
+      icon: () => <FontAwesome5 name="lungs" size={35} color="green" />,
+    },
   ];
-
+  useEffect(() => {
+    if (!uctx.userInfo?.token) return;
+    setisloading((p) => true);
+    fetch(
+      `https://psychedelic-wine-production.up.railway.app/patient_user/get_all_departments_only_names`,
+      {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${uctx.userInfo?.token}`,
+        },
+      }
+    )
+      .then((r) => {
+        if (!r.ok || r.status === 401) throw "Error";
+        return r.json();
+      })
+      .then((d) => {
+        const dpts = departments.filter((department) =>
+          d.includes(department.name)
+        );
+        console.log(dpts);
+        setdepts(dpts);
+      })
+      .catch((e) => console.log(e))
+      .finally((f) => setisloading(false));
+  }, [uctx.userInfo?.token]);
   const ListItem = ({ item }) => {
     return (
       <TouchableOpacity
         style={styles.itemContainer}
         onPress={() => {
-          navigate("Doctors");
+          navigate("DepartmentInfo", {
+            dept_title: item.name,
+            token: uctx.userInfo.token,
+          });
         }}
       >
         {item?.icon && <item.icon />}
@@ -94,14 +141,24 @@ const DepartmentsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Departments</Text>
-      <FlatList
-        data={departments}
-        renderItem={ListItem}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={3}
-        showsVerticalScrollIndicator={false}
-      />
+      {isloading ? (
+        <ActivityIndicator
+          size={50}
+          color={"orange"}
+          style={{ alignSelf: "center" }}
+        />
+      ) : (
+        <>
+          <Text style={styles.heading}>Departments</Text>
+          <FlatList
+            data={depts}
+            renderItem={ListItem}
+            keyExtractor={(item) => item.id.toString()}
+            numColumns={3}
+            showsVerticalScrollIndicator={false}
+          />
+        </>
+      )}
     </View>
   );
 };

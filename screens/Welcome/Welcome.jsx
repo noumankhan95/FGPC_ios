@@ -9,11 +9,12 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { authCtx } from "../../store/auth";
 var j = 0;
 const WelcomePage = () => {
   const { navigate } = useNavigation();
-
+  const uctx = useContext(authCtx);
   const info = [
     { text: "FGPCH", description: "Hello" },
     {
@@ -44,14 +45,14 @@ const WelcomePage = () => {
   ];
 
   const [data, setdata] = useState(info[j]);
-  console.log("i val ", info.length);
+  // console.log("i val ", info.length);
   const changeImageHandler = () => {
-    if (j <= info.length - 1) {
-      console.log("seetting for j: ", j);
-      setdata((p) => info[j++]);
-      console.log("new j", info[j]);
+    if (j < info.length - 1) {
+      // console.log("seetting for j: ", j);
+      setdata((p) => info[++j]);
+      // console.log("new j", info[j]);
     } else {
-      navigate("Authenticate");
+      navigate(uctx.isloggedIn ? "Root" : "Authenticate");
     }
 
     // setdata(info[i])
@@ -66,7 +67,7 @@ const WelcomePage = () => {
   return (
     <SafeAreaView style={styles.outerView}>
       <View style={styles.innerView}>
-        <MaterialIcons size={40} name="medical-services" color="#1aabde" />
+        <MaterialIcons size={40} name="medical-services" color="crimson" />
         <Text style={styles.text}>{data.text}</Text>
       </View>
       {!data.image && <ActivityIndicator size={"large"}></ActivityIndicator>}
@@ -110,11 +111,11 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
+    backgroundColor: "crimson",
     padding: 10,
     width: "80%",
     margin: 20,
-    backgroundColor: "deepskyblue",
+    // backgroundColor: "deepskyblue",
     borderRadius: 5,
   },
   inContainer: {

@@ -14,13 +14,18 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const { width, height } = Dimensions.get("window");
+import { useContext } from "react";
+import { authCtx } from "../../store/auth";
 const SetupProfile = (props) => {
+  const uCtx = useContext(authCtx);
   const [status, requestpermission] = ImagePicker.useCameraPermissions();
+  const [pw, setpw] = useState();
   const [selectedimg, setselectedimg] = useState(
     "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg"
   );
+  useEffect(() => {}, []);
   const CameraHandler = async () => {
     console.log("tap");
     try {
@@ -34,12 +39,44 @@ const SetupProfile = (props) => {
       console.log(e);
     }
   };
+  const pwchangeHandler = (t) => {
+    console.log(pw);
+    setpw((p) => t);
+  };
+  const changePasswordHandler = () => {
+    fetch(
+      "https://psychedelic-wine-production.up.railway.app/auth/updated_account_by_user",
+      {
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${uCtx.userInfo?.token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password: pw }),
+      }
+    )
+      .then((d) => {
+        if (d.status !== 401 || d.status !== 400 || d.status !== 405) {
+          return d.json();
+        } else {
+          throw "Error";
+        }
+      })
+      .then((r) => {
+        console.log(r);
+        return Alert.alert("Success", "Your Password Was Changed");
+      })
+      .catch((e) => {
+        console.log(e);
+        Alert.alert("Error", "Couldnt Change Your Password");
+      });
+  };
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
       style={styles.container}
     >
-      <KeyboardAvoidingView behavior={"height"} style={styles.container}>
+      <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
         <View style={styles.imgContainer}>
           <Image
             source={{
@@ -55,26 +92,46 @@ const SetupProfile = (props) => {
           </TouchableOpacity>
         </View>
         <View style={styles.inputContainer}>
-          <TextInput style={styles.input} placeholder="Full Name" />
-          <TextInput style={styles.input} placeholder="Date Of Birth" />
-          <TextInput style={styles.input} placeholder="Nickname" />
-          <TextInput style={styles.input} placeholder="Email" />
-          <View style={[styles.input, { padding: 0 }]}>
+          <View style={{ alignItems: "flex-start" }}>
+            <Text style={{ marginVertical: 10, fontSize: 19 }}>
+              Email : {"    " + uCtx.userInfo.email}
+            </Text>
+            <Text style={{ marginVertical: 10, fontSize: 19 }}>
+              Date Of Birth : {"   " + uCtx.userInfo.date_of_birth}
+            </Text>
+            <Text style={{ marginVertical: 10, fontSize: 19 }}>
+              Gender : {"   " + uCtx.userInfo.gender}
+            </Text>
+          </View>
+
+          {/* <TextInput style={styles.input} placeholder={uCtx.userInfo.name} /> */}
+          {/* <TextInput
+            style={styles.input}
+            placeholder={uCtx.userInfo.date_of_birth}
+          /> */}
+          <TextInput
+            style={styles.input}
+            placeholder="New Password"
+            value={pw}
+            onChangeText={pwchangeHandler}
+          />
+          {/* <TextInput style={styles.input} placeholder={uCtx.userInfo.email} /> */}
+          {/* <View style={[styles.input, { padding: 0 }]}>
             <Picker selectedValue="Male">
               <Picker.Item label="Male" value="Male" />
               <Picker.Item label="Female" value="Female" />
-            </Picker>
-          </View>
-          <Text>
+            </Picker> */}
+          {/* </View> */}
+          {/* <Text>
             Lorem ipsum dolor sitm sit iste voluptatum ducimus fugiat
             cupiditate!
-          </Text>
+          </Text> */}
         </View>
         <TouchableOpacity
           style={styles.btnContainer}
-          onPress={() => props.navigation.navigate("Root")}
+          onPress={changePasswordHandler}
         >
-          <Text style={styles.btnText}>Continue</Text>
+          <Text style={styles.btnText}>Change Password</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </ScrollView>
